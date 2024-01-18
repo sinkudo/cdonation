@@ -2,11 +2,28 @@
 pragma solidity ^0.8.0;
 
 contract Users {
-    // Discord ID => address
-    mapping (uint => address) users;
+    address public owner;
 
-    function createUser(uint discordId, address addr) public {
+    // Discord ID => address
+    mapping (uint => address) public users;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    event UserCreated(uint indexed discordId, address indexed addr);
+
+    function createUser(uint discordId, address addr) public onlyOwner {
+        require(users[discordId] == address(0), "User already exists");
+        require(users[discordId] != address(0), "Invalid address");
+        
         users[discordId] = addr;
+        emit UserCreated(discordId, addr);
     }
 
     function getAddress(uint discordId) public view returns (address) {

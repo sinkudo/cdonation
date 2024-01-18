@@ -35,6 +35,5 @@ contract Payments {
             value: msg.value
         });
         payments.push(newPayment);
-        // payable(address(this)).transfer(msg.value);  // NOT WORKING
     }
 }
