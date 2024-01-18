@@ -24,6 +24,8 @@ contract Subscriptions {
         subscriptionTiersInstance = SubscriptionTiers(subTiersAddress);
     }
 
+    event SubscriptionCreated(uint userId, uint roleId);
+
     function createSubscription(uint _serverId, uint _tierId, uint _userId) public returns (uint, uint) {
         SubscriptionTiers.SubscriptionTier memory tier = subscriptionTiersInstance.getById(_serverId, _tierId);
 
@@ -34,6 +36,9 @@ contract Subscriptions {
             endTimestamp: block.timestamp + 30 days
         });
         subscriptions[_userId].push(newSub);
+
+        emit SubscriptionCreated(_userId, tier.roleId);
+
         nextId++;
 
         return (_userId, tier.roleId);

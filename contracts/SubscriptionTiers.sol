@@ -43,7 +43,7 @@ contract SubscriptionTiers {
         string memory _description,
         uint _price,
         uint _roleId
-    ) public onlyOwner {
+    ) external onlyOwner {
         SubscriptionTier memory newTier = SubscriptionTier({
             id: nextId,
             creatorId: _creatorId,
@@ -59,11 +59,11 @@ contract SubscriptionTiers {
         nextId++;
     }
 
-    function getAllSubscriptionTiersByDiscordId(uint serverId) public view returns (SubscriptionTier[] memory) {
+    function getAllSubscriptionTiersByDiscordId(uint serverId) private view returns (SubscriptionTier[] memory) {
         return subscriptionTiers[serverId]; 
     }
 
-    function getById(uint _serverId, uint _tierId) public view returns (SubscriptionTier memory) {
+    function getById(uint _serverId, uint _tierId) external view returns (SubscriptionTier memory) {
         SubscriptionTier[] memory tiers = getAllSubscriptionTiersByDiscordId(_serverId);
         for (uint i = 0; i < tiers.length; i++) {
             if (tiers[i].id == _tierId) {
