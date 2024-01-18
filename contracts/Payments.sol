@@ -1,43 +1,40 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.0;
 
 contract Payments {
     struct Payment {
-        uint amount;
         uint timestamp;
         address from;
-        string message;
+        address to;
+        uint value;
     }
 
-    struct Balance {
-        uint totalPayments;
-        mapping(uint => Payment) payments;
+    Payment[] payments;
+
+    function getAllPayments() public view returns (Payment[] memory) {
+        return payments;
     }
 
-    mapping(address => Balance) public balances;
-
-    function currentBalance() public view returns(uint) {
-        return address(this).balance;
+    function makePayment(address payable _to) public payable {
+        Payment memory newPayment  = Payment({
+            timestamp: block.timestamp,
+            from: msg.sender,
+            to: _to,
+            value: msg.value
+        });
+        payments.push(newPayment);
+        
+        _to.transfer(msg.value);
     }
 
-    function getPayment(address _addr, uint _index) public view returns(Payment memory) {
-        return balances[_addr].payments[_index];
-    }
-
-    function pay(string memory message) public payable returns(uint) {
-        uint paymentNum = balances[msg.sender].totalPayments;
-        balances[msg.sender].totalPayments++;
-
-        Payment memory newPayment = Payment(
-            msg.value,
-            block.timestamp,
-            msg.sender,
-            message
-        );
-
-        balances[msg.sender].payments[paymentNum] = newPayment;
-
-        return msg.value;
+    function deposit() public payable {
+        Payment memory newPayment  = Payment({
+            timestamp: block.timestamp,
+            from: msg.sender,
+            to: address(this),
+            value: msg.value
+        });
+        payments.push(newPayment);
+        // payable(address(this)).transfer(msg.value);  // NOT WORKING
     }
 }
