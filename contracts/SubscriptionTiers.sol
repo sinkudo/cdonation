@@ -43,7 +43,7 @@ contract SubscriptionTiers {
         string memory _description,
         uint _price,
         uint _roleId
-    ) external onlyOwner {
+    ) public onlyOwner {
         SubscriptionTier memory newTier = SubscriptionTier({
             id: nextId,
             creatorId: _creatorId,

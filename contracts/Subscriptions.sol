@@ -20,8 +20,8 @@ contract Subscriptions {
 
     mapping (uint => Subscription[]) subscriptions;
 
-    constructor() {
-        subscriptionTiersInstance = new SubscriptionTiers();
+    constructor(address subTiersAddress) {
+        subscriptionTiersInstance = SubscriptionTiers(subTiersAddress);
     }
 
     function createSubscription(uint _serverId, uint _tierId, uint _userId) public returns (uint, uint) {
@@ -37,9 +37,5 @@ contract Subscriptions {
         nextId++;
 
         return (_userId, tier.roleId);
-    }
-
-    function func(uint _serverId) public view returns (SubscriptionTiers.SubscriptionTier[] memory) {
-        return subscriptionTiersInstance.getAllSubscriptionTiersByDiscordId(_serverId);
     }
 }
