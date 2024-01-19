@@ -24,10 +24,10 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         .setDescription("Здравствуйте, уважаемые подписчики и ценители нашего творчества!\n" +
             "Ваши донаты являются важным стимулом для развития и создания еще более интересного и качественного контента. Оставайтесь с нами, участвуйте в обсуждениях, предлагайте свои идеи, и вы сможете стать частью нашей дружной семьи. Спасибо, что вы с нами!!\n");
 
-    let buttonPay = new ButtonBuilder()
-        .setStyle(ButtonStyle.Primary)
-        .setLabel("Задонатить")
-        .setCustomId("pay")
+    // let buttonPay = new ButtonBuilder()
+    //     .setStyle(ButtonStyle.Primary)
+    //     .setLabel("Задонатить")
+    //     .setCustomId("pay")
 
     let buttonSub = new ButtonBuilder()
         .setStyle(ButtonStyle.Success)
