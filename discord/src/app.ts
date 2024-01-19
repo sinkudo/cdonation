@@ -7,4 +7,4 @@ export const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "5mb" }));
 
-app.use("/api", ApiRouter);
+app.use("/", ApiRouter);

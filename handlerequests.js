@@ -90,7 +90,7 @@ exports.createSubtiers = async (req, res) => {
   // const contract = await getContract(subtiers_adr, subtier_abi)
   const contract = await SubscriptionTiers_contract()
   // console.log(contract.getAddress())
-  return await contract.methods.createSubscriptionTier(req.body.serverid, req.body.creatorid, req.body.name, req.body.description, req.body.price, req.body.roleid).send({ from: process.env.PAPA_ADDRESS, gas: 3000000 })
+  return await contract.methods.createSubscriptionTier(req.body.serverId, req.body.creatorId, req.body.name, req.body.description, req.body.price, req.body.roleId).send({ from: process.env.PAPA_ADDRESS, gas: 3000000 })
 }
 exports.getsuball = async (req, res) => {
   // return await contract.methods
@@ -124,18 +124,18 @@ exports.updateTier = async (req, res) => {
 exports.createSub = async (req, res) => {
   const contract = await Subscriptions_contract()
   const contract2 = await Users_contract()
-  let userAddress = await contract2.methods.getAddress(req.body.userid).call();
-  return await contract.methods.createSubscription(req.body.serverid, req.body.tierid, req.body.userid).send({ from: userAddress, gas: 3_000_000 })
+  let userAddress = await contract2.methods.getAddress(req.body.userId).call();
+  return await contract.methods.createSubscription(req.body.serverId, req.body.tierId, req.body.userId).send({ from: userAddress, gas: 3_000_000 })
 }
 exports.makePayment = async (req, res) => {
   const body = req.body
   let tiers = await SubscriptionTiers_contract()
   let users = await Users_contract()
   let payment = await Payments_contract()
-  let creatorid = await tiers.methods.getCreatorIdByTierId(body.serverid, body.tierid).call()
-  let userAddress = await users.methods.getAddress(body.userid).call();
-  let creatorAddress = await users.methods.getAddress(creatorid).call();
-  let price = await tiers.methods.getPriceByTierId(body.serverid, body.tierid).call()
+  let creatorid = await tiers.methods.getCreatorIdByTierId(body.serverId, body.tierId).call()
+  let userAddress = await users.methods.getAddress(body.userId).call();
+  let creatorAddress = await users.methods.getAddress(creatorId).call();
+  let price = await tiers.methods.getPriceByTierId(body.serverId, body.tierId).call()
   let response = await payment.methods.makePayment(creatorAddress).send({ from: userAddress, gas: 3_000_000, value: price })
   return response
 }

@@ -53,12 +53,13 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
 
         const createOptions = (tier: SubTierResponse) => {
             let buttonSub = new ButtonBuilder();
-
-            if (user.roles.cache.find(role => role.id == tier.roleid)) {
+            // console.log(user.roles.cache)
+            // console.log(tier)
+            if (user.roles.cache.get(tier.roleId)) {
                 buttonSub
                     .setStyle(ButtonStyle.Danger)
                     .setLabel("Отменить подписку")
-                    .setCustomId(`desubcribe#${tier.id}#${tier.roleid}`);
+                    .setCustomId(`desubcribe#${tier.id}#${tier.roleId}`);
             } else {
                 buttonSub
                     .setStyle(ButtonStyle.Success)
@@ -147,9 +148,9 @@ export const createSub = (interaction: ButtonInteraction) => {
     let customId = interaction.customId.split("#")
     const guild = interaction.guild!;
     createSubscribe({
-        serverid: String(guild.id),
-        tierid: Number(customId[1]),
-        userid: String(interaction.user.id)
+        serverId: String(guild.id),
+        tierId: Number(customId[1]),
+        userId: String(interaction.user.id)
     }).then(async (response) => {
         let member = <GuildMember>interaction.member
         await member.roles.add(response.data.roleId)
@@ -167,9 +168,9 @@ export const removeSub = (interaction: ButtonInteraction) => {
     let guild = interaction.guild!;
 
     removeSubscribe({
-        serverid: String(guild.id),
-        tierid: Number(tierId),
-        userid: String(interaction.user.id)
+        serverId: String(guild.id),
+        tierId: Number(tierId),
+        userId: String(interaction.user.id)
     }).then(async response => {
         if (response.data.ok) {
             let member = <GuildMember>interaction.member;

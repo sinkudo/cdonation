@@ -8,9 +8,9 @@ interface CreateUserRequest {
 export const createUser = async (body: CreateUserRequest) => await serverHTTP.post("/createUser", body);
 
 interface SubRequest {
-    serverid: string,
-    tierid: number,
-    userid: string
+    serverId: string,
+    tierId: number,
+    userId: string
 }
 
 interface CreateSubResponse {

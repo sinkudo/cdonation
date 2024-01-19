@@ -4,8 +4,8 @@ export interface SubTier {
     name: string,
     description: string,
     price: number,
-    creatorid: string,
-    roleid: string
+    creatorId: string,
+    roleId: string
 }
 
 export interface SubTierResponse extends SubTier {
@@ -13,7 +13,7 @@ export interface SubTierResponse extends SubTier {
 }
 
 interface SubTierCreateRequest extends SubTier {
-    serverid: string
+    serverId: string
 }
 
 interface SubTierCreateResponse {

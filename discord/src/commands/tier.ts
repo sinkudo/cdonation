@@ -40,9 +40,9 @@ async function create(interaction: ChatInputCommandInteraction) {
                     price: price,
                     name: name,
                     description: description,
-                    serverid: String(guild.id),
-                    creatorid: String(interaction.user.id),
-                    roleid: String(role.id)
+                    serverId: String(guild.id),
+                    creatorId: String(interaction.user.id),
+                    roleId: String(role.id)
                 }).then(async response => {
                     if (response.data.ok) {
                         await guild.channels.create({
