@@ -57,7 +57,7 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
             let buttonEdit = new ButtonBuilder()
                 .setStyle(ButtonStyle.Primary)
                 .setLabel("Изменить")
-                .setCustomId(`subedit#${tier.id}`);
+                .setCustomId(`subedit#${tier.id}#${tier.name}#${tier.price}`);
 
             let actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>();
             if (isAdmin) actionRow.addComponents(buttonEdit);

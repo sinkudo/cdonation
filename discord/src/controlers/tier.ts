@@ -4,8 +4,8 @@ export interface SubTier {
     name: string,
     description: string,
     price: number,
-    userID: string,
-    roleID: string
+    creatorid: string,
+    roleid: string
 }
 
 export interface SubTierResponse extends SubTier {
@@ -13,7 +13,7 @@ export interface SubTierResponse extends SubTier {
 }
 
 interface SubTierCreateRequest extends SubTier {
-    serverID: string
+    serverid: string
 }
 
 interface SubTierCreateResponse {
@@ -21,7 +21,7 @@ interface SubTierCreateResponse {
     error?: string
 }
 
-export const subTierCreate = async (body: SubTierCreateRequest) => await serverHTTP.post<SubTierCreateResponse>("/subTierCreate", body);
+export const subTierCreate = async (body: SubTierCreateRequest) => await serverHTTP.post<SubTierCreateResponse>("/createSubtiers", body);
 
 export const getSubTiersByDiscordID = async (discordID: string) => {
     // return {
@@ -48,5 +48,5 @@ export const getSubTiersByDiscordID = async (discordID: string) => {
     //         roleID: "321"
     //     }]
     // }
-    return await serverHTTP.get<SubTierResponse[]>(`/getSubTiersByServerID/${discordID}`)
+    return await serverHTTP.get<SubTierResponse[]>(`/getDiscordSubtiers/${discordID}`)
 }

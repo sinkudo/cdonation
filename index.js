@@ -31,18 +31,5 @@ app.listen(3000)
 //     })
 // })
 
-const router = express.Router();
-
-router.post('/subTierCreate', ({req, res}) => {
-    console.log(req.body);
-})
-
-router.get('/getSubTiersByServerID/:serverId', ({req, res}) => {
-    console.log(req.params.serverId);
-})
-
-app.use(router);
-
-
 var routes = require('./routes')
 routes(app)

@@ -50,7 +50,7 @@ async function create(interaction: ChatInputCommandInteraction) {
                     name: name,
                     description: description,
                     serverID: String(guild.id),
-                    userID: String(interaction.user.id),
+                    creatorID: String(interaction.user.id),
                     roleID: String(role.id)
                 }).then(async response => {
                     if (response.data.ok) {
