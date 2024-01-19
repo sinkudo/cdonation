@@ -7,9 +7,6 @@ contract Subscriptions {
     SubscriptionTiers public subscriptionTiersInstance;
 
     uint nextId;
-    // Оформление подписки
-    // Request: [serverID, tierID, userID]
-    // Response: [userID, roleID]
 
     struct Subscription {
         uint id;
@@ -27,7 +24,7 @@ contract Subscriptions {
     event SubscriptionCreated(uint userId, uint roleId);
 
     function createSubscription(uint _serverId, uint _tierId, uint _userId) public returns (uint, uint) {
-        SubscriptionTiers.SubscriptionTier memory tier = subscriptionTiersInstance.getById(_serverId, _tierId);
+        SubscriptionTiers.SubscriptionTier memory tier = subscriptionTiersInstance.getSubscriptionById(_serverId, _tierId);
 
         Subscription memory newSub = Subscription({
             id: nextId,

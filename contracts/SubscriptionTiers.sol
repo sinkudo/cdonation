@@ -59,15 +59,42 @@ contract SubscriptionTiers {
         nextId++;
     }
 
+    // // server id, tierd id, name, desription, price
+    function updateTier(
+        uint _serverId, 
+        uint _tierId, 
+        string memory _name, 
+        string memory _description, 
+        uint _price
+    ) public {
+        SubscriptionTier[] storage tiers = subscriptionTiers[_serverId];
+        uint arrayIndex = getArrayIndexById(_serverId, _tierId);
+
+        tiers[arrayIndex].name = _name;
+        tiers[arrayIndex].description = _description;
+        tiers[arrayIndex].price = _price;
+    }
+
     function getAllSubscriptionTiersByDiscordId(uint serverId) public view returns (SubscriptionTier[] memory) {
         return subscriptionTiers[serverId]; 
     }
 
-    function getById(uint _serverId, uint _tierId) external view returns (SubscriptionTier memory) {
+    function getSubscriptionById(uint _serverId, uint _tierId) public view returns (SubscriptionTier memory) {
         SubscriptionTier[] memory tiers = getAllSubscriptionTiersByDiscordId(_serverId);
         for (uint i = 0; i < tiers.length; i++) {
             if (tiers[i].id == _tierId) {
                 return tiers[i];
+            }
+        }
+
+        revert("Tier not found");
+    }
+
+    function getArrayIndexById(uint _serverId, uint _tierId) internal view returns (uint) {
+        SubscriptionTier[] memory tiers = getAllSubscriptionTiersByDiscordId(_serverId);
+        for (uint i = 0; i < tiers.length; i++) {
+            if (tiers[i].id == _tierId) {
+                return i;
             }
         }
 
