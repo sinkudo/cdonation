@@ -76,7 +76,8 @@ exports.checkMyBalance = async (req, res) => {
   // return Users_contract.methods.getMyBalance().call()
 }
 exports.sendTrans = async (req, res) => {
-  return await web3.eth.sendTransaction({ to: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', from: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', value: web3.utils.toWei('100000', 'ether') });
+  // return await web3.eth.sendTransaction({ to: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', from: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', value: web3.utils.toWei('100000', 'ether') });
+  return await web3.eth.sendTransaction({ to: PAPA_ADDRESS, from: req.body.buyer, value: web3.utils.toWei(req.body.weis, 'ether') });
 }
 exports.createUser = async (req, res) => {
   // const contract1 = await getContract(users_adr, users_abi)
@@ -104,7 +105,8 @@ exports.createSubtiers = async (req, res) => {
 exports.createSub = async (req, res) => {
   // const contract = await getContract(sub_adr, sub_abi)
   const contract = await Subscriptions_contract()
-  return await contract.methods.createSubscription(req.body.serverId, req.body.tierId, req.body.userId).send({ from: PAPA_ADDRESS, gas: 3_000_000 })
+  console.log()
+  return await contract.methods.createSubscription(req.body.serverid, req.body.tierid, req.body.userid).send({ from: PAPA_ADDRESS, gas: 3_000_000 })
 }
 exports.getsuball = async (req, res) => {
   // return await contract.methods

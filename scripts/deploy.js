@@ -39,7 +39,6 @@ async function main() {
   const testcontract = await TestContract.deploy()
   await testcontract.waitForDeployment()
 
-  console.log("Contract address:", await yarik.getAddress());
   await lock.waitForDeployment();
 
   console.log(

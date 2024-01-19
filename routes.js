@@ -3,18 +3,18 @@ var handlerequests = require('./handlerequests')
 var JSONBig = require('json-bigint')
 
 module.exports = (app) => {
-    app.get('/checkMyBalance', (req, res) => {
-        console.log('123')
-        handlerequests.checkMyBalance(req, res)
-        .then(response => {
-            console.log("Balance is %d", response)
-            let new_resp = `Balance is ${response}`
-            res.status(200).send(new_resp)
-        })
-        .catch(err => {
-            res.status(400).send(err)
-        })
-    });
+    // app.get('/checkMyBalance', (req, res) => {
+    //     console.log('123')
+    //     handlerequests.checkMyBalance(req, res)
+    //     .then(response => {
+    //         console.log("Balance is %d", response)
+    //         let new_resp = `Balance is ${response}`
+    //         res.status(200).send(new_resp)
+    //     })
+    //     .catch(err => {
+    //         res.status(400).send(err)
+    //     })
+    // });
     app.post('/sendTransaction', (req, res) => {
         handlerequests.sendTrans(req, res)
         .then(response => {
@@ -51,8 +51,16 @@ module.exports = (app) => {
     app.post('/createSub', (req, res) => {
         handlerequests.createSub(req, res)
         .then(response => {
-            console.log(response)
-            res.status(200).send(response)
+            console.log('success')
+            // console.log(response.events.SubscriptionCreated.returnValues)
+            let data = response.events.SubscriptionCreated.returnValues
+            console.log(data.userId, data.roleId)
+            // res.status(200).send(data.userId)
+            let q = {
+                userId: data.userId.toString(),
+                roleId: data.roleId.toString()
+            }
+            res.status(200).send( q )
         })
         .catch(err => {
             // res.status(400).send(err.innerError.message)
@@ -79,5 +87,4 @@ module.exports = (app) => {
             res.status(400).send(err.message)
         })
     })
-    // app.get('/getsuball'), 
 }
