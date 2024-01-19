@@ -70,7 +70,7 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
             let buttonEdit = new ButtonBuilder()
                 .setStyle(ButtonStyle.Primary)
                 .setLabel("Изменить")
-                .setCustomId(`subedit#${tier.id}#${tier.name}#${tier.price}#${tier.description}`);
+                .setCustomId(`subedit#${tier.id}#${tier.name}#${tier.price}#${tier.description}#${tier.roleId}`);
 
             let actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>();
             if (isAdmin) actionRow.addComponents(buttonEdit);
@@ -98,7 +98,7 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
 }
 
 export const subEdit = async (interaction: ButtonInteraction) => {
-    const [bname, id, name1, price1, description1] = interaction.customId.split("#")
+    const [bname, id, name1, price1, description1, roleID] = interaction.customId.split("#")
     await interaction.showModal(subTierCreateModal(name1, price1, description1))
 
     const submitted = await interaction.awaitModalSubmit({
@@ -123,6 +123,9 @@ export const subEdit = async (interaction: ButtonInteraction) => {
                 description: description
             }).then(async (response) => {
                 if (response.data.ok) {
+                    let role = guild.roles.cache.get(roleID);
+                    if (role) await role.setName(name)
+
                     await submitted.reply({ephemeral: true, content: `Уровень подписки "${name}" успешно обновлён`})
                 } else {
                     await submitted.reply({

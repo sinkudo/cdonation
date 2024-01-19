@@ -2,7 +2,6 @@
 
 import {BaseInteraction} from "discord.js";
 import {createSub, getSubTiers, removeSub, subEdit} from "@/commands/info";
-import {removeSubscribe} from "@/controlers/user";
 
 const {Client, GatewayIntentBits, Events, Collection} = require("discord.js");
 const path = require("path");
