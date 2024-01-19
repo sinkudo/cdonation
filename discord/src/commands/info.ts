@@ -11,6 +11,8 @@ import {
 } from "discord.js";
 import {getSubTiersByDiscordID, SubTierResponse, updateSubTier} from "@/controlers/tier";
 import {subTierCreateModal} from "@/components/modals/subTierCreateModal";
+import {createSubscribe} from "@/controlers/user";
+import {fetchUser} from "@/helper/helper";
 
 export const data = new SlashCommandBuilder()
     .setName("info")
@@ -86,10 +88,8 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
     }
 }
 
-export const subEdit = async (interaction: ButtonInteraction) => {
-    let args = interaction.customId.split("#")
-
-    await interaction.showModal(subTierCreateModal(args[2], args[3], args[4]))
+export const subEdit = async (interaction: ButtonInteraction, bname, id, name1, price1, description1) => {
+    await interaction.showModal(subTierCreateModal(name1, price1, description1))
 
     const submitted = await interaction.awaitModalSubmit({
         time: 600000,
@@ -107,7 +107,7 @@ export const subEdit = async (interaction: ButtonInteraction) => {
 
             updateSubTier({
                 serverId: String(guild.id),
-                tierId: args[1],
+                tierId: id,
                 name: name,
                 price: price,
                 description: description
@@ -120,7 +120,10 @@ export const subEdit = async (interaction: ButtonInteraction) => {
                         content: `Возникла ошибка при создании уровня подписки: ${response.data.error}`
                     })
                 }
-            })
+            }).catch()
+            {
+
+            }
 
         } catch (err: any) {
             await submitted.reply({
@@ -128,5 +131,18 @@ export const subEdit = async (interaction: ButtonInteraction) => {
                 content: `Возникла ошибка при создании уровня подписки: ${err.message}`
             })
         }
+    }
+}
+
+export const createSub = (interaction: ButtonInteraction, tierId) => {
+    createSubscribe({
+        serverid: String(interaction.guild.id),
+        tierid: tierId,
+        userid: String(interaction.user.id)
+    }).then((response) => {
+        interaction.member.roles.add(response.data.roleId)
+    }).catch()
+    {
+
     }
 }

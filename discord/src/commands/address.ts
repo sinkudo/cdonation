@@ -23,5 +23,8 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
             ephemeral: true,
             content: "Адрес успешно привязан"
         })
-    })
+    }).catch()
+    {
+
+    }
 };
