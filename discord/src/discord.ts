@@ -1,7 +1,7 @@
 "use strict";
 
 import {BaseInteraction} from "discord.js";
-import {getSubTiers} from "@/commands/info";
+import {getSubTiers, subEdit} from "@/commands/info";
 
 const {Client, GatewayIntentBits, Events, Collection} = require("discord.js");
 const path = require("path");
@@ -26,7 +26,8 @@ discordClient.once(Events.ClientReady, async () => {
 });
 
 const buttonInteractions = {
-    "sub": getSubTiers
+    "sub": getSubTiers,
+    "subedit": subEdit
 }
 
 type buttonKey = keyof typeof buttonInteractions;
@@ -81,7 +82,8 @@ discordClient.on(Events.InteractionCreate, async (interaction: BaseInteraction) 
     } else if (interaction.isModalSubmit()) {
 
     } else if (interaction.isButton()) {
-        await buttonInteractions[interaction.customId as buttonKey](interaction);
+        let id = interaction.customId.split("#")
+        await buttonInteractions[id[0] as buttonKey](interaction);
     }
 });
 

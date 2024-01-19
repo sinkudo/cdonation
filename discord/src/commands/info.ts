@@ -1,14 +1,16 @@
 import {
-    Locale,
-    ApplicationCommandType,
-    PermissionFlagsBits,
     SlashCommandBuilder,
     ChatInputCommandInteraction,
     EmbedBuilder,
     ButtonBuilder,
-    ButtonStyle, ActionRowBuilder, MessageActionRowComponentBuilder, ButtonInteraction, PermissionsBitField, GuildMember
+    ActionRowBuilder,
+    MessageActionRowComponentBuilder,
+    ButtonInteraction,
+    PermissionsBitField,
+    GuildMember, ButtonStyle, ChannelType, PermissionFlagsBits
 } from "discord.js";
-import {getSubTiersByDiscordID, SubTierResponse} from "@/controlers/tier";
+import {getSubTiersByDiscordID, SubTierResponse, updateSubTier} from "@/controlers/tier";
+import {subTierCreateModal} from "@/components/modals/subTierCreateModal";
 
 export const data = new SlashCommandBuilder()
     .setName("info")
@@ -57,7 +59,7 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
             let buttonEdit = new ButtonBuilder()
                 .setStyle(ButtonStyle.Primary)
                 .setLabel("Изменить")
-                .setCustomId(`subedit#${tier.id}#${tier.name}#${tier.price}`);
+                .setCustomId(`subedit#${tier.id}#${tier.name}#${tier.price}#${tier.description}`);
 
             let actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>();
             if (isAdmin) actionRow.addComponents(buttonEdit);
@@ -81,5 +83,50 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
 
     }).catch()
     {
+    }
+}
+
+export const subEdit = async (interaction) => {
+    let args = interaction.customId.split("#")
+
+    await interaction.showModal(subTierCreateModal(args[2], args[3], args[4]))
+
+    const submitted = await interaction.awaitModalSubmit({
+        time: 600000,
+        filter: i => i.user.id === interaction.user.id
+    }).catch(() => null);
+
+    if (submitted) {
+        try {
+            const name = submitted.fields.getTextInputValue("modal-addTier-name");
+            const price = Number(submitted.fields.getTextInputValue("modal-addTier-price"));
+            if (isNaN(price)) throw new Error("Неккоректная цена");
+            const description = submitted.fields.getTextInputValue("modal-addTier-description");
+
+            const guild = interaction.guild!;
+
+            updateSubTier({
+                serverId: guild.id,
+                id: args[1],
+                name: name,
+                price: price,
+                description: description
+            }).then(async (response) => {
+                if (response.data.ok) {
+                    await submitted.reply({ephemeral: true, content: `Уровень подписки "${name}" успешно обновлён`})
+                } else {
+                    await submitted.reply({
+                        ephemeral: true,
+                        content: `Возникла ошибка при создании уровня подписки: ${response.data.error}`
+                    })
+                }
+            })
+
+        } catch (err: any) {
+            await submitted.reply({
+                ephemeral: true,
+                content: `Возникла ошибка при создании уровня подписки: ${err.message}`
+            })
+        }
     }
 }

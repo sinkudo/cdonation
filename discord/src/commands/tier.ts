@@ -1,13 +1,4 @@
-import {
-    Locale,
-    ApplicationCommandType,
-    PermissionFlagsBits,
-    SlashCommandBuilder,
-    ChatInputCommandInteraction,
-    EmbedBuilder,
-    ButtonBuilder,
-    ButtonStyle, ActionRowBuilder, MessageActionRowComponentBuilder, TextChannel, ButtonInteraction, ChannelType
-} from "discord.js";
+import {SlashCommandBuilder, ChatInputCommandInteraction, ChannelType, PermissionFlagsBits} from "discord.js";
 import {subTierCreateModal} from "@/components/modals/subTierCreateModal";
 import {subTierCreate} from "@/controlers/tier";
 
