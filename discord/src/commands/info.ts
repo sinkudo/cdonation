@@ -175,6 +175,10 @@ export const removeSub = (interaction: ButtonInteraction) => {
         if (response.data.ok) {
             let member = <GuildMember>interaction.member;
             await member.roles.remove(roleId);
+            await interaction.reply({
+                ephemeral: true,
+                content: "Подписка отменена"
+            })
         }
     })
 
