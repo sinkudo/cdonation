@@ -7,7 +7,7 @@ interface CreateUserRequest {
 
 export const createUser = async (body: CreateUserRequest) => await serverHTTP.post("/createUser", body);
 
-interface CreateSubRequest {
+interface SubRequest {
     serverid: string,
     tierid: number,
     userid: string
@@ -18,4 +18,6 @@ interface CreateSubResponse {
     roleId: string
 }
 
-export const createSubscribe = async (body: CreateSubRequest) => await serverHTTP.post<CreateSubResponse>("/createSub", body);
+export const createSubscribe = async (body: SubRequest) => await serverHTTP.post<CreateSubResponse>("/createSub", body);
+
+export const removeSubscribe = async (body: SubRequest) => await serverHTTP.post("/cancelSubcription", body);

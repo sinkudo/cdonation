@@ -1,7 +1,8 @@
 "use strict";
 
 import {BaseInteraction} from "discord.js";
-import {createSub, getSubTiers, subEdit} from "@/commands/info";
+import {createSub, getSubTiers, removeSub, subEdit} from "@/commands/info";
+import {removeSubscribe} from "@/controlers/user";
 
 const {Client, GatewayIntentBits, Events, Collection} = require("discord.js");
 const path = require("path");
@@ -29,7 +30,8 @@ const buttonInteractions = {
     "sub": getSubTiers,
     "subedit": subEdit,
     "subcribe": createSub,
-    "pay": () => null
+    "pay": () => null,
+    "desubcribe": removeSub
 }
 
 type buttonKey = keyof typeof buttonInteractions;

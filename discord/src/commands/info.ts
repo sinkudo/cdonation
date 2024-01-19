@@ -11,7 +11,7 @@ import {
 } from "discord.js";
 import {getSubTiersByDiscordID, SubTierResponse, updateSubTier} from "@/controlers/tier";
 import {subTierCreateModal} from "@/components/modals/subTierCreateModal";
-import {createSubscribe} from "@/controlers/user";
+import {createSubscribe, removeSubscribe} from "@/controlers/user";
 
 export const data = new SlashCommandBuilder()
     .setName("info")
@@ -52,10 +52,19 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
     getSubTiersByDiscordID(String(guild.id)).then(async tiers => {
 
         const createOptions = (tier: SubTierResponse) => {
-            let buttonSub = new ButtonBuilder()
-                .setStyle(ButtonStyle.Success)
-                .setLabel("Оформить подписку")
-                .setCustomId(`subcribe#${tier.id}`);
+            let buttonSub = new ButtonBuilder();
+
+            if (user.roles.cache.find(role => role.id == tier.roleid)) {
+                buttonSub
+                    .setStyle(ButtonStyle.Danger)
+                    .setLabel("Отменить подписку")
+                    .setCustomId(`desubcribe#${tier.id}#${tier.roleid}`);
+            } else {
+                buttonSub
+                    .setStyle(ButtonStyle.Success)
+                    .setLabel("Оформить подписку")
+                    .setCustomId(`subcribe#${tier.id}`);
+            }
 
             let buttonEdit = new ButtonBuilder()
                 .setStyle(ButtonStyle.Primary)
@@ -151,4 +160,21 @@ export const createSub = (interaction: ButtonInteraction) => {
     }).catch()
     {
     }
+}
+
+export const removeSub = (interaction: ButtonInteraction) => {
+    const [bname, tierId, roleId] = interaction.customId.split("#")
+    let guild = interaction.guild!;
+
+    removeSubscribe({
+        serverid: String(guild.id),
+        tierid: Number(tierId),
+        userid: String(interaction.user.id)
+    }).then(async response => {
+        if (response.data.ok) {
+            let member = <GuildMember>interaction.member;
+            await member.roles.remove(roleId);
+        }
+    })
+
 }
