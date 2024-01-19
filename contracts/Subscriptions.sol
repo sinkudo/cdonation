@@ -77,7 +77,6 @@ contract Subscriptions {
             }
 
         }
-
         revert("Sub not found");
     }
 

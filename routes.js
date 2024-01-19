@@ -41,6 +41,7 @@ module.exports = (app) => {
             })
     })
     app.post('/createSub', (req, res) => {
+        console.log(req.body)
         handlerequests.makePayment(req, res)
             .then(response => {
                 console.log('kaif')
@@ -122,17 +123,26 @@ module.exports = (app) => {
             res.status(400).send(err.message)
         })
     })
-    app.post('/cancelSubscription', async (req, res) => {
+    app.post('/cancelSubcription', async (req, res) => {
         handlerequests.cancelSub(req, res)
         .then(response => {
-            res.status(200).send('subscription canceled')
+            console.log("subscription canceled")
+            res.status(200).send({ok: true})
         })
         .catch(err => {
-            console.log(err)
-            res.status(400).send('error during subscription canceling')
+            console.log("error during subscription canceling")
+            res.status(400).send({ok: false})
         })
     })
     app.post('/qq', async (req, res) => {
-        discordHTTP.post('/deleteRole', { user_id: req.body.user_id, role_id: req.body.role_id, server_id: req.body.server_id})
+        console.log(req.body)
+        discordHTTP.post('/deleteRole', req.body).then(() => {
+            console.log('deleted')
+            res.status(200).send('deleted')
+        })
+        .catch(() => {
+            console.log('problem')
+            res.status(400)
+        })
     })
 }

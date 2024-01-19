@@ -8,7 +8,7 @@ const {Client, GatewayIntentBits, Events, Collection} = require("discord.js");
 const path = require("path");
 const fs = require("fs");
 
-const discordClient = new Client({intents: [GatewayIntentBits.Guilds]});
+const discordClient = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]});
 
 discordClient.commands = new Collection();
 discordClient.once(Events.ClientReady, async () => {

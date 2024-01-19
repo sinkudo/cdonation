@@ -107,7 +107,7 @@ exports.getAllTiersOfServer = async (req, res) => {
     // })
     for (let key in element) {
       if (element.hasOwnProperty(key) && typeof element[key] === 'bigint') {
-        element[key] = Number(element[key])
+        element[key] = String(element[key])
       }
     }
 
@@ -132,7 +132,7 @@ exports.makePayment = async (req, res) => {
   let tiers = await SubscriptionTiers_contract()
   let users = await Users_contract()
   let payment = await Payments_contract()
-  let creatorid = await tiers.methods.getCreatorIdByTierId(body.serverId, body.tierId).call()
+  let creatorId = await tiers.methods.getCreatorIdByTierId(body.serverId, body.tierId).call()
   let userAddress = await users.methods.getAddress(body.userId).call();
   let creatorAddress = await users.methods.getAddress(creatorId).call();
   let price = await tiers.methods.getPriceByTierId(body.serverId, body.tierId).call()
@@ -175,8 +175,10 @@ exports.checkBalance = async (req, res) => {
 }
 
 exports.cancelSub = async (req, res) => {
+  console.log(req.body)
   const Subcription = await Subscriptions_contract()
-  return Subcription.methods.cancelSubscription(req.body.serverId, req.body.userId)
+  let resp = await Subcription.methods.cancelSubscription(req.body.serverId, req.body.userId).send({from: process.env.PAPA_ADDRESS, gas: 3_000_000})
+  return resp
 }
 
 async function cronim() {
@@ -186,4 +188,5 @@ async function cronim() {
 
 cron.schedule('0 0 * * *', async () => {
   this.renew_subscriptions()
+  
 })
