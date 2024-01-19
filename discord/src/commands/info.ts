@@ -86,7 +86,7 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
     }
 }
 
-export const subEdit = async (interaction) => {
+export const subEdit = async (interaction: ButtonInteraction) => {
     let args = interaction.customId.split("#")
 
     await interaction.showModal(subTierCreateModal(args[2], args[3], args[4]))

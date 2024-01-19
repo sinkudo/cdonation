@@ -1,3 +1,8 @@
 import {serverHTTP} from "@/helper/axios";
 
-export const createUser = async (body) => await serverHTTP.post("/createUser", body);
+interface CreateUserRequest {
+    id: string,
+    address: string
+}
+
+export const createUser = async (body: CreateUserRequest) => await serverHTTP.post("/createUser", body);

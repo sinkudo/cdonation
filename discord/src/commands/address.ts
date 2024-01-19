@@ -10,8 +10,8 @@ export const data = new SlashCommandBuilder()
     .setDescription("Привязать свой адрес");
 
 export const execute = async (interaction: ChatInputCommandInteraction) => {
-    const address = interaction.options.getString("address");
-    const userId = interaction.user.id;
+    const address = String(interaction.options.getString("address"));
+    const userId = String(interaction.user.id);
 
     createUser({id: userId, address: address}).then(() => {
         interaction.reply({
