@@ -59,6 +59,11 @@ contract SubscriptionTiers {
         nextId++;
     }
 
+    function getCreatorIdByTierId(uint _serverId, uint _tierId) public view returns (uint) {
+        SubscriptionTier memory tier = getById(_serverId, _tierId);
+        return tier.creatorId;
+    }
+
     // // server id, tierd id, name, desription, price
     function updateTier(
         uint _serverId, 
@@ -79,7 +84,7 @@ contract SubscriptionTiers {
         return subscriptionTiers[serverId]; 
     }
 
-    function getSubscriptionById(uint _serverId, uint _tierId) public view returns (SubscriptionTier memory) {
+    function getById(uint _serverId, uint _tierId) public view returns (SubscriptionTier memory) {
         SubscriptionTier[] memory tiers = getAllSubscriptionTiersByDiscordId(_serverId);
         for (uint i = 0; i < tiers.length; i++) {
             if (tiers[i].id == _tierId) {
