@@ -65,15 +65,6 @@ async function getContract(address, abi) {
   });
   return contract
 }
-exports.checkMyBalance = async (req, res) => {
-  console.log(666)
-  console.log(yarik_abi)
-  const contract = await getContract(yarik_adr, yarik_abi);
-  console.log(777)
-  // const contract = await Users_contract
-  return contract.methods.getMyBalance().call()
-  // return Users_contract.methods.getMyBalance().call()
-}
 exports.sendTrans = async (req, res) => {
   // return await web3.eth.sendTransaction({ to: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', from: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', value: web3.utils.toWei('100000', 'ether') });
   return await web3.eth.sendTransaction({ to: process.env.PAPA_ADDRESS, from: req.body.buyer, value: web3.utils.toWei(req.body.weis, 'ether') });
@@ -105,8 +96,6 @@ exports.getsuball = async (req, res) => {
 }
 exports.getAllTiersOfServer = async (req, res) => {
   const contract1 = await SubscriptionTiers_contract()
-  // const contract2 = await Users_contract()
-  // return await contract.methods.getAllSubscriptionTiersByDiscordId(req.params.id).call();
   let q = await contract1.methods.getAllSubscriptionTiersByDiscordId(req.params.id).call();
 
   resp_arr = []
@@ -133,7 +122,6 @@ exports.updateTier = async (req, res) => {
 }
 exports.createSub = async (req, res) => {
   const contract = await Subscriptions_contract()
-  // return await contract.methods.createSubscription(req.body.serverid, req.body.tierid, req.body.userid).send({ from: process.env.PAPA_ADDRESS, gas: 3_000_000 })
   const contract2 = await Users_contract()
   let userAddress = await contract2.methods.getAddress(req.body.userid).call();
   return await contract.methods.createSubscription(req.body.serverid, req.body.tierid, req.body.userid).send({ from: userAddress, gas: 3_000_000 })
@@ -151,7 +139,7 @@ exports.makePayment = async (req, res) => {
   return response
 }
 
-exports.mm = async (req, res) => {
+exports.renew_subscriptions = async (req, res) => {
   const subs = await Subscriptions_contract()
   const users = await Users_contract()
   const payment = await Payments_contract()
@@ -161,33 +149,31 @@ exports.mm = async (req, res) => {
   if (subscriptions.length === 0)
     return;
   subscriptions.forEach(async element => {
-    // if (element['endTimestamp'] > Date.now() / 1000)
-    //   return
-    //1708262161
-    //1705670384204
+    if (element['endTimestamp'] > Date.now() / 1000)
+      return
     const user_id = element['userId']
     const user_address = await users.methods.getAddress(user_id).call()
     console.log(element['serverId'], element['subscriptionTierId'])
     const creator_id = await tiers.methods.getCreatorIdByTierId(element['serverId'], element['subscriptionTierId']).call()
-    // const 
-    console.log(user_address, qwe)
-    // payment.methods.makePayment(creator_address).send({ from: user_address, gas: 3_000_000, value: element['price'] })
-    // payment.methods.makePayment()
+    const creator_address = await users.methods.getAddress(creator_id).call()    
+    payment.methods.makePayment(creator_address).send({ from: user_address, gas: 3_000_000, value: element['price'] }).then(() => {
+      subs.methods.renewSubscription(element['id']).send({ from: process.env.PAPA_ADDRESS, gas: 3_000_000})
+    })
+    console.log("renew sub")
   });
-  // let q = await subs.methods.nextId().call()
-  // console.log(await subs.methods.nextId().call())
-  // console.log(q)
 }
+
+exports.checkBalance = async (req, res) => {
+  const balance = await web3.eth.getBalance(req.params.address); 
+  return web3.utils.fromWei(balance, "ether")
+}
+
 
 async function cronim() {
   const subs = await Subscriptions_contract()
-  // let subscriptions = await subs.methods.listSubs().call()
   console.log(subs.methods)
-  // console.log(q)
 }
 
-cron.schedule('* * * * *', async () => {
-  // console.log('nice')
-  // cronim()
-  // console.log(await cronim)
+cron.schedule('0 0 * * *', async () => {
+  this.renew_subscriptions()
 })
