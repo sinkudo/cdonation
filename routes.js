@@ -4,6 +4,7 @@ const handlerequests = require('./handlerequests')
 var JSONBig = require('json-bigint')
 const cron = require('node-cron');
 const { default: Web3 } = require('web3');
+const {discordHTTP} = require('./axios')
 
 module.exports = (app) => {
     app.post('/sendTransaction', (req, res) => {
@@ -120,5 +121,18 @@ module.exports = (app) => {
             console.log(err)
             res.status(400).send(err.message)
         })
+    })
+    app.post('/cancelSubscription', async (req, res) => {
+        handlerequests.cancelSub(req, res)
+        .then(response => {
+            res.status(200).send('subscription canceled')
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).send('error during subscription canceling')
+        })
+    })
+    app.post('/qq', async (req, res) => {
+        discordHTTP.post('/deleteRole', { user_id: req.body.user_id, role_id: req.body.role_id, server_id: req.body.server_id})
     })
 }

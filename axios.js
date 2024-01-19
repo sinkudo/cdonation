@@ -1,3 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
+const axios = require('axios')
 
-export const discordHTTP = axios.create({baseURL: "http://localhost:3100"});
+exports.discordHTTP = axios.create({baseURL: "http://localhost:3100"});

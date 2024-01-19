@@ -29,7 +29,8 @@ function pause(millis) {
     curDate = Date.now();
   } while (curDate - date < millis);
 }
-const { Users_contract, SubscriptionTiers_contract, Subscriptions_contract, TestContract_contract, Payments_contract } = require('./getContracts.js')
+const { Users_contract, SubscriptionTiers_contract, Subscriptions_contract, TestContract_contract, Payments_contract } = require('./getContracts.js');
+const { discordHTTP } = require('./axios.js');
 
 function getAddresses() {
   const data = JSON.parse(fs.readFileSync('./addresses.json', 'utf8'))
@@ -153,21 +154,30 @@ exports.renew_subscriptions = async (req, res) => {
       return
     const user_id = element['userId']
     const user_address = await users.methods.getAddress(user_id).call()
-    console.log(element['serverId'], element['subscriptionTierId'])
     const creator_id = await tiers.methods.getCreatorIdByTierId(element['serverId'], element['subscriptionTierId']).call()
-    const creator_address = await users.methods.getAddress(creator_id).call()    
+    const creator_address = await users.methods.getAddress(creator_id).call()
+    const user_balance = await web3.eth.getBalance(user_address)
+    const renewal_status = await subs.methods.getRenewalStatus(element['id']).call()
+    if (user_balance < element['price'] || !renewal_status) {
+      const role_id = await tiers.methods.getRoleIdByTierId(element['serverId'], element['subscriptionTierId']).call()
+      discordHTTP.post('/deleteRole', { user_id: user_id, role_id: role_id, server_id: element['serverId']})
+    }
     payment.methods.makePayment(creator_address).send({ from: user_address, gas: 3_000_000, value: element['price'] }).then(() => {
-      subs.methods.renewSubscription(element['id']).send({ from: process.env.PAPA_ADDRESS, gas: 3_000_000})
+      subs.methods.renewSubscription(element['id']).send({ from: process.env.PAPA_ADDRESS, gas: 3_000_000 })
     })
     console.log("renew sub")
   });
 }
 
 exports.checkBalance = async (req, res) => {
-  const balance = await web3.eth.getBalance(req.params.address); 
+  const balance = await web3.eth.getBalance(req.params.address);
   return web3.utils.fromWei(balance, "ether")
 }
 
+exports.cancelSub = async (req, res) => {
+  const Subcription = await Subscriptions_contract()
+  return Subcription.methods.cancelSubscription(req.body.serverId, req.body.userId)
+}
 
 async function cronim() {
   const subs = await Subscriptions_contract()

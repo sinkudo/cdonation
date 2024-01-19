@@ -34,7 +34,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         .setLabel("Подписки")
         .setCustomId("sub");
 
-    let actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttonPay, buttonSub);
+    let actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(buttonSub);
 
     await interaction.channel?.send({
         embeds: [header],
