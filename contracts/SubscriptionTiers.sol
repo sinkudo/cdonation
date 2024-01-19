@@ -47,10 +47,10 @@ contract SubscriptionTiers {
         SubscriptionTier memory newTier = SubscriptionTier({
             id: nextId,
             creatorId: _creatorId,
-            roleId: _roleId,
             name: _name,
             description: _description,
-            price: _price
+            price: _price,
+            roleId: _roleId
         });
         subscriptionTiers[_serverId].push(newTier);
 
