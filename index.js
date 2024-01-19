@@ -1,9 +1,12 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser')
+const express = require('express');
+
+const app = express();
+const bodyParser = require('body-parser');
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("files"));
+
 app.listen(3000)
 // var handlerequests = require('./handlerequests')
 // app.get('/checkMyBalance', ({req, res}) => {
@@ -27,6 +30,19 @@ app.listen(3000)
 //         res.status(400).send(err.message)
 //     })
 // })
+
+const router = express.Router();
+
+router.post('/subTierCreate', ({req, res}) => {
+    console.log(req.body);
+})
+
+router.get('/getSubTiersByServerID/:serverId', ({req, res}) => {
+    console.log(req.params.serverId);
+})
+
+app.use(router);
+
 
 var routes = require('./routes')
 routes(app)
