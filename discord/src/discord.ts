@@ -28,7 +28,8 @@ discordClient.once(Events.ClientReady, async () => {
 const buttonInteractions = {
     "sub": getSubTiers,
     "subedit": subEdit,
-    "subcribe": createSub
+    "subcribe": createSub,
+    "pay": () => null
 }
 
 type buttonKey = keyof typeof buttonInteractions;

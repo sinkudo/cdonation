@@ -12,7 +12,6 @@ import {
 import {getSubTiersByDiscordID, SubTierResponse, updateSubTier} from "@/controlers/tier";
 import {subTierCreateModal} from "@/components/modals/subTierCreateModal";
 import {createSubscribe} from "@/controlers/user";
-import {fetchUser} from "@/helper/helper";
 
 export const data = new SlashCommandBuilder()
     .setName("info")
@@ -147,6 +146,5 @@ export const createSub = (interaction: ButtonInteraction) => {
         await member.roles.add(response.data.roleId)
     }).catch()
     {
-
     }
 }
