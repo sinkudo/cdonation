@@ -5,6 +5,7 @@ contract Users {
     address public owner;
 
     mapping (uint => address) public users;
+    address[] addresses;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not the owner");
@@ -18,13 +19,16 @@ contract Users {
     event UserCreated(uint indexed discordId, address indexed addr);
 
     function createUser(uint discordId, address addr) external onlyOwner {
-        // require(users[discordId] == address(0), "User already exists");
-        
+        addresses.push(addr);
         users[discordId] = addr;
         emit UserCreated(discordId, addr);
     }
 
     function getAddress(uint discordId) external view returns (address) {
+        return users[discordId];
+    }
+
+    function getAddressTest(uint discordId) external view returns (address) {
         return users[discordId];
     }
 }
