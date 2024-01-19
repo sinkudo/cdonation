@@ -88,7 +88,8 @@ export const getSubTiers = async (interaction: ButtonInteraction) => {
     }
 }
 
-export const subEdit = async (interaction: ButtonInteraction, bname, id, name1, price1, description1) => {
+export const subEdit = async (interaction: ButtonInteraction) => {
+    const [bname, id, name1, price1, description1] = interaction.customId.split("#")
     await interaction.showModal(subTierCreateModal(name1, price1, description1))
 
     const submitted = await interaction.awaitModalSubmit({
@@ -134,13 +135,16 @@ export const subEdit = async (interaction: ButtonInteraction, bname, id, name1, 
     }
 }
 
-export const createSub = (interaction: ButtonInteraction, tierId) => {
+export const createSub = (interaction: ButtonInteraction) => {
+    let customId = interaction.customId.split("#")
+    const guild = interaction.guild!;
     createSubscribe({
-        serverid: String(interaction.guild.id),
-        tierid: tierId,
+        serverid: String(guild.id),
+        tierid: Number(customId[1]),
         userid: String(interaction.user.id)
-    }).then((response) => {
-        interaction.member.roles.add(response.data.roleId)
+    }).then(async (response) => {
+        let member = <GuildMember>interaction.member
+        await member.roles.add(response.data.roleId)
     }).catch()
     {
 

@@ -84,7 +84,7 @@ discordClient.on(Events.InteractionCreate, async (interaction: BaseInteraction) 
 
     } else if (interaction.isButton()) {
         let customId = interaction.customId.split("#")
-        await buttonInteractions[customId[0] as buttonKey](interaction, ...customId);
+        await buttonInteractions[customId[0] as buttonKey](interaction);
     }
 });
 
