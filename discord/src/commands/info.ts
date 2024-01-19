@@ -144,6 +144,10 @@ export const createSub = (interaction: ButtonInteraction) => {
     }).then(async (response) => {
         let member = <GuildMember>interaction.member
         await member.roles.add(response.data.roleId)
+        await interaction.reply({
+            ephemeral: true,
+            content: "Подписка успешно оформлена"
+        })
     }).catch()
     {
     }
