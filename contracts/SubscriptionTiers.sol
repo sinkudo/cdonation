@@ -59,7 +59,7 @@ contract SubscriptionTiers {
         nextId++;
     }
 
-    function getAllSubscriptionTiersByDiscordId(uint serverId) private view returns (SubscriptionTier[] memory) {
+    function getAllSubscriptionTiersByDiscordId(uint serverId) public view returns (SubscriptionTier[] memory) {
         return subscriptionTiers[serverId]; 
     }
 

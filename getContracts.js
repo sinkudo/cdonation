@@ -1,5 +1,4 @@
 // // import { users_adr, users_abi, yarik_abi, yarik_adr } from './getJsonData.js';
-const { users_adr, users_abi, } = require('./getJsonData.js')
 const fs = require('fs')
 const { Web3 } = require('web3')
 
