@@ -45,8 +45,12 @@ contract Payments {
         logPayment(block.timestamp, msg.sender, address(this), msg.value);
     }
 
+    function withdraw(address payable _to, uint _value) public payable onlyOwner {
+        _to.transfer(_value);
+    }
+
     function withdrawAll() public payable onlyOwner {
         logPayment(block.timestamp, address(this), owner, address(this).balance);
         payable(owner).transfer(address(this).balance);
-    } 
+    }
 }
