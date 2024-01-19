@@ -54,7 +54,16 @@ contract Subscriptions {
                 subscriptions[i].endTimestamp += 30 days;
                 return;
             }
+        }
 
+        revert("Sub not found");
+    }
+
+    function getRenewalStatus(uint _subId) external view returns (bool){
+        for (uint i = 0; i < subscriptions.length; i++) {
+            if (subscriptions[i].id == _subId) {
+                return subscriptions[i].renewal;
+            }
         }
 
         revert("Sub not found");

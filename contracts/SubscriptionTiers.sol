@@ -99,7 +99,10 @@ contract SubscriptionTiers {
 
         revert("Tier not found");
     }
-
+    function getRoleIdByTierId(uint _serverId, uint _tierId) external view returns (uint) {
+        SubscriptionTier memory tier = getById(_serverId, _tierId);
+        return tier.roleId;
+    }
     function getArrayIndexById(uint _serverId, uint _tierId) internal view returns (uint) {
         SubscriptionTier[] memory tiers = getAllSubscriptionTiersByDiscordId(_serverId);
         for (uint i = 0; i < tiers.length; i++) {
