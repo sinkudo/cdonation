@@ -25,4 +25,4 @@ export const subTierCreate = async (body: SubTierCreateRequest) => await serverH
 
 export const getSubTiersByDiscordID = async (discordID: string) => serverHTTP.get<SubTierResponse[]>(`/getDiscordSubtiers/${discordID}`);
 
-export const updateSubTier = async (body) => await serverHTTP.post("/updateSubtiers", body);
+export const updateSubTier = async (body) => await serverHTTP.post("/updateTier", body);

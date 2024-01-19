@@ -107,7 +107,7 @@ export const subEdit = async (interaction) => {
 
             updateSubTier({
                 serverId: guild.id,
-                id: args[1],
+                tierId: args[1],
                 name: name,
                 price: price,
                 description: description
