@@ -18,7 +18,7 @@ contract Users {
     event UserCreated(uint indexed discordId, address indexed addr);
 
     function createUser(uint discordId, address addr) external onlyOwner {
-        require(users[discordId] == address(0), "User already exists");
+        // require(users[discordId] == address(0), "User already exists");
         
         users[discordId] = addr;
         emit UserCreated(discordId, addr);

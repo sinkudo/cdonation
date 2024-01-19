@@ -40,6 +40,7 @@ function getAddress(contractname){
     return addresses[contractname]
 }
 function getAbi(contractName) {
+    // console.log(`./artifacts/contracts/${contractName}.sol/${contractName}.json`, 'utf8')
     const data = JSON.parse(fs.readFileSync(`./artifacts/contracts/${contractName}.sol/${contractName}.json`, 'utf8'))
     const abi = data['abi']
     return abi
@@ -54,6 +55,7 @@ async function getContract(contractName) {
       // Set default gas amount
       gas: 5000000,
     });
+    // console.log(abi)
     return contract
 }
 exports.Users_contract = async () => {
@@ -67,4 +69,7 @@ exports.SubscriptionTiers_contract = async () => {
 }
 exports.TestContract_contract = async () => {
     return await getContract("TestContract")
+}
+exports.Payments_contract = async() => {
+    return await getContract("Payments")
 }

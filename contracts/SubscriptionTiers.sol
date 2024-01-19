@@ -64,6 +64,11 @@ contract SubscriptionTiers {
         return tier.creatorId;
     }
 
+    function getPriceByTierId(uint _serverId, uint _tierId) public view returns (uint) {
+        SubscriptionTier memory tier = getById(_serverId, _tierId);
+        return tier.price;
+    }
+
     // // server id, tierd id, name, desription, price
     function updateTier(
         uint _serverId, 

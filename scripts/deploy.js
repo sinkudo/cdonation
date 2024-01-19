@@ -39,6 +39,10 @@ async function main() {
   const testcontract = await TestContract.deploy()
   await testcontract.waitForDeployment()
 
+  const Payments = await ethers.getContractFactory('Payments')
+  const payments = await Payments.deploy()
+  await payments.waitForDeployment()
+
   await lock.waitForDeployment();
 
   console.log(
@@ -50,7 +54,8 @@ async function main() {
     Users: await users.getAddress(),
     SubscriptionTiers: await subtiers.getAddress(),
     Subscriptions: await subcriptions.getAddress(),
-    TestContract: await testcontract.getAddress()
+    TestContract: await testcontract.getAddress(),
+    Payments: await payments.getAddress()
   }
   const data = JSON.stringify(adrs)
   fs.writeFile("addresses.json", data, (error) => {

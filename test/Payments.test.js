@@ -14,10 +14,6 @@ describe("Payments", function () {
     const Payments = await ethers.getContractFactory("Payments", acc1)
     payments = await Payments.deploy()
     await payments.waitForDeployment()
-    // paymentsaddress = await payments.getAddress()
-    // console.log("пэймент", payments)
-    // console.log("address", await payments.getAddress())
-    // await payments.deployed()
   })
 
   it("should be deployed", async function() {
