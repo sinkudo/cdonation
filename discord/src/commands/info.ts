@@ -106,7 +106,7 @@ export const subEdit = async (interaction: ButtonInteraction) => {
             const guild = interaction.guild!;
 
             updateSubTier({
-                serverId: guild.id,
+                serverId: String(guild.id),
                 tierId: args[1],
                 name: name,
                 price: price,

@@ -3,10 +3,15 @@ import {createUser} from "@/controlers/user";
 
 export const data = new SlashCommandBuilder()
     .setName("address")
-    .addChannelOption(option =>
-        option.setName('address')
-            .setDescription('Адрес')
-            .setRequired(true))
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("set")
+            .setDescription("Привязать свой адрес")
+            .addStringOption(option =>
+                option.setName('address')
+                    .setDescription('Адрес')
+                    .setRequired(true))
+    )
     .setDescription("Привязать свой адрес");
 
 export const execute = async (interaction: ChatInputCommandInteraction) => {
