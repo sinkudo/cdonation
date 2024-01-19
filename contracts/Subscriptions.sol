@@ -16,6 +16,7 @@ contract Subscriptions {
         uint endTimestamp;
         uint serverId;
         uint price;
+        bool renewal;
     }
 
     Subscription[] public subscriptions;
@@ -35,19 +36,10 @@ contract Subscriptions {
             startTimestamp: block.timestamp,
             endTimestamp: block.timestamp + 30 days,
             serverId: _serverId,
-            price: tier.price
+            price: tier.price,
+            renewal: true
         });
         subscriptions.push(newSub);
-
-        // SubscriptionTiers.SubscriptionTier memory tier = subscriptionTiersInstance.getSubscriptionById(_serverId, _tierId);
-
-        // Subscription memory newSub = Subscription({
-        //     id: nextId,
-        //     subscriptionTierId: _tierId,
-        //     startTimestamp: block.timestamp,
-        //     endTimestamp: block.timestamp + 30 days
-        // });
-        // subscriptions[_userId].push(newSub);
 
         emit SubscriptionCreated(_userId, tier.roleId);
 
@@ -55,12 +47,32 @@ contract Subscriptions {
 
         return (_userId, tier.roleId);
     }
+
+    function renewSubscription(uint _subId) public {
+        for (uint i = 0; i < subscriptions.length; i++) {
+            if (subscriptions[i].id == _subId) {
+                subscriptions[i].endTimestamp += 30 days;
+                return;
+            }
+
+        }
+
+        revert("Sub not found");
+    }
+
+    function cancelSubscription(uint _serverId, uint _userId) public { // add tierID, `cause chel can buy multiple tiers on server  
+        for (uint i = 0; i < subscriptions.length; i++) {
+            if (subscriptions[i].serverId == _serverId && subscriptions[i].userId == _userId) {
+                subscriptions[i].renewal = false;
+                return;
+            }
+
+        }
+
+        revert("Sub not found");
+    }
+
     function listSubs() public view returns (Subscription[] memory) {
         return subscriptions;
     }
-    // function func() public {
-    //     for (uint i = 0; i < subscriptions.length; i++) {
-            
-    //     }
-    // }
 }
