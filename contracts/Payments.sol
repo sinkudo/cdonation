@@ -26,7 +26,7 @@ contract Payments {
         return payments;
     }
 
-    function logPayment(uint _timestamp, address _from, address _to, uint _value) public {
+    function logPayment(uint _timestamp, address _from, address _to, uint _value) private {
         Payment memory newPayment = Payment({
             timestamp: _timestamp,
             from: _from,

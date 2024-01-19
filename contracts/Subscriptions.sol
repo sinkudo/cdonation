@@ -18,7 +18,7 @@ contract Subscriptions {
         uint endTimestamp;
     }
 
-    mapping (uint => Subscription[]) subscriptions;
+    mapping (uint => Subscription[]) private subscriptions;
 
     constructor(address subTiersAddress) {
         subscriptionTiersInstance = SubscriptionTiers(subTiersAddress);

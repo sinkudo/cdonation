@@ -15,7 +15,7 @@ contract SubscriptionTiers {
     }
 
     // Discord Server ID => SubscriptionTier[]
-    mapping (uint => SubscriptionTier[]) public subscriptionTiers;
+    mapping (uint => SubscriptionTier[]) private subscriptionTiers;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not the owner");
@@ -59,7 +59,7 @@ contract SubscriptionTiers {
         nextId++;
     }
 
-    function getAllSubscriptionTiersByDiscordId(uint serverId) public view returns (SubscriptionTier[] memory) {
+    function getAllSubscriptionTiersByDiscordId(uint serverId) private view returns (SubscriptionTier[] memory) {
         return subscriptionTiers[serverId]; 
     }
 

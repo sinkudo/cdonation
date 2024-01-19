@@ -17,14 +17,14 @@ contract Users {
 
     event UserCreated(uint indexed discordId, address indexed addr);
 
-    function createUser(uint discordId, address addr) public onlyOwner {
+    function createUser(uint discordId, address addr) external onlyOwner {
         require(users[discordId] == address(0), "User already exists");
         
         users[discordId] = addr;
         emit UserCreated(discordId, addr);
     }
 
-    function getAddress(uint discordId) public view returns (address) {
+    function getAddress(uint discordId) external view returns (address) {
         return users[discordId];
     }
 }
